@@ -429,4 +429,18 @@ describe("Regularity", function() {
     it("#regexp is just an alias for #done", function() {
         expect(regularity.regexp).toBe(regularity.done);
     });
+
+    describe("#captureNext captures the next chunk", function() {
+      var regexp;
+
+      it('captures only the next chunk', function() {
+          regexp = regularity.oneOrMore('abc').captureNext().atMost(3, 'a').atMost(3, 'a').done();
+          expect(regexp).toEqual(/(?:abc)+((?:a){0,3})(?:a){0,3}/);
+      });
+
+      it('does nothing if there is no next chunk', function() {
+          regexp = regularity.oneOrMore('abc').captureNext().done();
+          expect(regexp).toEqual(/(?:abc)+/);
+      });
+    });
 });
